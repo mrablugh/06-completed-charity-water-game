@@ -33,6 +33,50 @@ const DIFFICULTY_SETTINGS = {
     }
 };
 
+const OBSTACLE_TYPES = [
+    {
+        name: 'Muddy Road',
+        width: 72,
+        height: 36,
+        color: '#7A5A2A',
+        imageSrc: 'img/muddy-road.png'
+    },
+    {
+        name: 'Pothole',
+        width: 54,
+        height: 34,
+        color: '#2F2F2F'
+    },
+    {
+        name: 'Large Boulder',
+        width: 60,
+        height: 60,
+        color: '#8A8F98',
+        imageSrc: 'img/large-boulder.png'
+    },
+    {
+        name: 'Fallen Tree',
+        width: 100,
+        height: 42,
+        color: '#7B4B1F',
+        imageSrc: 'img/fallen-tree.png'
+    }
+];
+
+const obstacleImages = {};
+
+function loadObstacleImages() {
+    OBSTACLE_TYPES.forEach((type) => {
+        if (!type.imageSrc) {
+            return;
+        }
+
+        const image = new Image();
+        image.src = type.imageSrc;
+        obstacleImages[type.name] = image;
+    });
+}
+
 // --- State Management ---
 let currentScore = 1000;
 let isGameOver = false;
@@ -97,8 +141,9 @@ class Truck {
 
 class Obstacle {
     constructor(speed) {
-        this.width = 50;
-        this.height = 50;
+        this.type = OBSTACLE_TYPES[Math.floor(Math.random() * OBSTACLE_TYPES.length)];
+        this.width = this.type.width;
+        this.height = this.type.height;
         this.lane = Math.floor(Math.random() * NUM_LANES); // Random lane 0-3
         this.x = GAME_WIDTH; // Start off-screen right
         this.y = (this.lane * LANE_HEIGHT) + (LANE_HEIGHT / 2) - (this.height / 2);
@@ -107,8 +152,55 @@ class Obstacle {
     }
 
     draw(ctx) {
-        ctx.fillStyle = '#E74C3C'; // Red for danger/pollutants
-        ctx.fillRect(this.x, this.y, this.width, this.height);
+        const obstacleImage = obstacleImages[this.type.name];
+
+        if (obstacleImage && obstacleImage.complete && obstacleImage.naturalWidth > 0 && this.type.name !== 'Pothole') {
+            ctx.drawImage(obstacleImage, this.x, this.y, this.width, this.height);
+            return;
+        }
+
+        if (this.type.name === 'Muddy Road') {
+            ctx.fillStyle = this.type.color;
+            ctx.beginPath();
+            ctx.roundRect(this.x, this.y + 8, this.width, this.height - 16, 12);
+            ctx.fill();
+            ctx.fillStyle = 'rgba(255, 255, 255, 0.12)';
+            ctx.fillRect(this.x + 8, this.y + this.height / 2 - 2, this.width - 16, 4);
+            return;
+        }
+
+        if (this.type.name === 'Pothole') {
+            ctx.fillStyle = '#1F1F1F';
+            ctx.beginPath();
+            ctx.ellipse(this.x + this.width / 2, this.y + this.height / 2, this.width / 2, this.height / 2, 0, 0, Math.PI * 2);
+            ctx.fill();
+            ctx.strokeStyle = '#4B4B4B';
+            ctx.lineWidth = 4;
+            ctx.stroke();
+            return;
+        }
+
+        if (this.type.name === 'Large Boulder') {
+            ctx.fillStyle = this.type.color;
+            ctx.beginPath();
+            ctx.arc(this.x + this.width / 2, this.y + this.height / 2, this.width / 2, 0, Math.PI * 2);
+            ctx.fill();
+            ctx.fillStyle = 'rgba(255, 255, 255, 0.18)';
+            ctx.beginPath();
+            ctx.arc(this.x + this.width * 0.38, this.y + this.height * 0.35, this.width * 0.15, 0, Math.PI * 2);
+            ctx.fill();
+            return;
+        }
+
+        ctx.fillStyle = this.type.color;
+        ctx.fillRect(this.x + 6, this.y + this.height * 0.35, this.width - 12, this.height * 0.3);
+        ctx.fillRect(this.x + this.width * 0.2, this.y + 8, this.width * 0.15, this.height - 16);
+        ctx.fillRect(this.x + this.width * 0.6, this.y + 8, this.width * 0.15, this.height - 16);
+        ctx.fillStyle = '#4FCB53';
+        ctx.beginPath();
+        ctx.arc(this.x + this.width * 0.22, this.y + 8, 10, 0, Math.PI * 2);
+        ctx.arc(this.x + this.width * 0.78, this.y + 8, 10, 0, Math.PI * 2);
+        ctx.fill();
     }
 
     update() {
@@ -118,6 +210,7 @@ class Obstacle {
 
 // --- Initialization ---
 const playerTruck = new Truck();
+loadObstacleImages();
 
 // --- Input Handling ---
 function updateDifficultyButtons() {
