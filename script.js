@@ -4,6 +4,7 @@ console.log('JavaScript file is linked correctly.');
 const canvas = document.getElementById('gameCanvas');
 const ctx = canvas.getContext('2d');
 const scoreElement = document.getElementById('score');
+const difficultyButtons = document.querySelectorAll('[data-difficulty]');
 
 // --- Game Configuration ---
 const GAME_WIDTH = canvas.width;
@@ -11,11 +12,28 @@ const GAME_HEIGHT = canvas.height;
 const NUM_LANES = 4;
 const LANE_HEIGHT = GAME_HEIGHT / NUM_LANES;
 
+// Different difficulty modes change how fast obstacles move and how often they appear.
+const DIFFICULTY_SETTINGS = {
+    easy: {
+        obstacleSpeed: 4,
+        spawnInterval: 90
+    },
+    normal: {
+        obstacleSpeed: 6,
+        spawnInterval: 60
+    },
+    hard: {
+        obstacleSpeed: 8,
+        spawnInterval: 40
+    }
+};
+
 // --- State Management ---
 let currentScore = 1000;
 let isGameOver = false;
 let obstacles = [];
 let frameCount = 0; // Used to time obstacle spawns
+let currentDifficulty = 'normal';
 
 // --- Classes ---
 class Truck {
@@ -65,13 +83,13 @@ class Truck {
 }
 
 class Obstacle {
-    constructor() {
+    constructor(speed) {
         this.width = 50;
         this.height = 50;
         this.lane = Math.floor(Math.random() * NUM_LANES); // Random lane 0-3
         this.x = GAME_WIDTH; // Start off-screen right
         this.y = (this.lane * LANE_HEIGHT) + (LANE_HEIGHT / 2) - (this.height / 2);
-        this.speed = 6;
+        this.speed = speed;
         this.hasCollided = false; // Flag to prevent multiple deductions for one hit
     }
 
@@ -89,6 +107,25 @@ class Obstacle {
 const playerTruck = new Truck();
 
 // --- Input Handling ---
+function updateDifficultyButtons() {
+    difficultyButtons.forEach((button) => {
+        button.classList.toggle('active', button.dataset.difficulty === currentDifficulty);
+    });
+}
+
+function setDifficulty(difficulty) {
+    currentDifficulty = difficulty;
+    updateDifficultyButtons();
+}
+
+difficultyButtons.forEach((button) => {
+    button.addEventListener('click', () => {
+        setDifficulty(button.dataset.difficulty);
+    });
+});
+
+setDifficulty(currentDifficulty);
+
 window.addEventListener('keydown', (e) => {
     if (isGameOver) return;
     if (e.key === 'ArrowUp') playerTruck.move('up');
@@ -151,9 +188,11 @@ function gameLoop() {
 
     // --- Manage Obstacles ---
     frameCount++;
-    // Spawn a new obstacle every 60 frames (~1 second)
-    if (frameCount % 60 === 0) {
-        obstacles.push(new Obstacle());
+    const difficulty = DIFFICULTY_SETTINGS[currentDifficulty];
+
+    // Spawn a new obstacle based on the selected difficulty.
+    if (frameCount % difficulty.spawnInterval === 0) {
+        obstacles.push(new Obstacle(difficulty.obstacleSpeed));
     }
 
     for (let i = obstacles.length - 1; i >= 0; i--) {
