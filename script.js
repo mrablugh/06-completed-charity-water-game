@@ -8,6 +8,8 @@ const startScreen = document.getElementById('start-screen');
 const startGameButton = document.getElementById('start-game-button');
 const pauseButton = document.getElementById('pause-button');
 const difficultyButtons = document.querySelectorAll('[data-difficulty]');
+const playerAvatarImage = new Image();
+playerAvatarImage.src = 'img/Truck.png';
 
 // --- Game Configuration ---
 const GAME_WIDTH = canvas.width;
@@ -44,8 +46,8 @@ let animationFrameId = null;
 // --- Classes ---
 class Truck {
     constructor() {
-        this.width = 80;
-        this.height = Math.floor(LANE_HEIGHT * 0.7);
+        this.width = 110;
+        this.height = Math.floor(LANE_HEIGHT * 0.9);
         this.lane = 1; 
         this.x = 50;   
         this.y = (this.lane * LANE_HEIGHT) + (LANE_HEIGHT / 2) - (this.height / 2);
@@ -66,9 +68,14 @@ class Truck {
             if (Math.floor(this.flashTimer / 5) % 2 === 0) return;
         }
 
-        ctx.fillStyle = '#00A3E0'; 
+        if (playerAvatarImage.complete && playerAvatarImage.naturalWidth > 0) {
+            ctx.drawImage(playerAvatarImage, this.x, this.y, this.width, this.height);
+            return;
+        }
+
+        ctx.fillStyle = '#00A3E0';
         ctx.fillRect(this.x, this.y, this.width, this.height);
-        
+
         ctx.fillStyle = '#FFFFFF';
         ctx.fillRect(this.x + this.width - 20, this.y + 5, 15, this.height - 10);
     }
