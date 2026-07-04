@@ -45,6 +45,67 @@ body {
     height: 100%;
 }
 
+#start-screen {
+    position: absolute;
+    inset: 0;
+    z-index: 30;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 24px;
+    background:
+        radial-gradient(circle at top, rgba(255, 201, 7, 0.18), transparent 45%),
+        linear-gradient(180deg, rgba(24, 24, 24, 0.94), rgba(12, 12, 12, 0.98));
+}
+
+#start-card {
+    width: min(100%, 460px);
+    padding: 28px 24px;
+    border: 2px solid rgba(245, 194, 67, 0.9);
+    border-radius: 24px;
+    background: rgba(25, 25, 25, 0.86);
+    box-shadow: 0 18px 40px rgba(0, 0, 0, 0.35);
+    color: white;
+    text-align: center;
+}
+
+#start-kicker {
+    margin-bottom: 10px;
+    color: #8BD1CB;
+    font-size: 0.8rem;
+    font-weight: bold;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+}
+
+#start-screen-title {
+    margin-bottom: 12px;
+    font-size: clamp(2.2rem, 6vw, 3.4rem);
+    line-height: 0.95;
+}
+
+#start-description {
+    margin: 0 auto 22px;
+    max-width: 34ch;
+    color: rgba(255, 255, 255, 0.9);
+    font-size: 1rem;
+    line-height: 1.5;
+}
+
+#difficulty-panel {
+    display: grid;
+    gap: 10px;
+    margin-bottom: 22px;
+}
+
+.panel-label {
+    color: #F5C243;
+    font-size: 0.9rem;
+    font-weight: bold;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+}
+
 #ui-layer {
     position: absolute;
     top: 10px;
@@ -86,6 +147,8 @@ body {
 #difficulty-controls {
     display: flex;
     gap: 6px;
+    justify-content: center;
+    flex-wrap: wrap;
 }
 
 .difficulty-button {
@@ -104,6 +167,31 @@ body {
     color: #222;
 }
 
+#start-game-button {
+    border: 0;
+    background: #2E9DF7;
+    color: white;
+    padding: 14px 24px;
+    border-radius: 999px;
+    font: inherit;
+    font-size: 1rem;
+    font-weight: bold;
+    cursor: pointer;
+    box-shadow: 0 10px 20px rgba(46, 157, 247, 0.28);
+}
+
+#start-game-button:hover {
+    filter: brightness(1.05);
+}
+
+#start-game-button:active {
+    transform: translateY(1px);
+}
+
+.game-started #start-screen {
+    display: none;
+}
+
 @media (max-width: 600px) {
     body {
         padding: 8px;
@@ -120,6 +208,14 @@ body {
         top: 8px;
         right: 10px;
         gap: 8px;
+    }
+
+    #start-card {
+        padding: 22px 18px;
+    }
+
+    #start-description {
+        font-size: 0.95rem;
     }
 
     #charity-water-logo {

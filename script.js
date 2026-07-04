@@ -4,6 +4,8 @@ console.log('JavaScript file is linked correctly.');
 const canvas = document.getElementById('gameCanvas');
 const ctx = canvas.getContext('2d');
 const scoreElement = document.getElementById('score');
+const startScreen = document.getElementById('start-screen');
+const startGameButton = document.getElementById('start-game-button');
 const difficultyButtons = document.querySelectorAll('[data-difficulty]');
 
 // --- Game Configuration ---
@@ -34,6 +36,8 @@ let isGameOver = false;
 let obstacles = [];
 let frameCount = 0; // Used to time obstacle spawns
 let currentDifficulty = 'normal';
+let gameHasStarted = false;
+let animationFrameId = null;
 
 // --- Classes ---
 class Truck {
@@ -118,6 +122,28 @@ function setDifficulty(difficulty) {
     updateDifficultyButtons();
 }
 
+function resetGame() {
+    currentScore = 1000;
+    isGameOver = false;
+    obstacles = [];
+    frameCount = 0;
+    playerTruck.lane = 1;
+    playerTruck.y = (playerTruck.lane * LANE_HEIGHT) + (LANE_HEIGHT / 2) - (playerTruck.height / 2);
+    playerTruck.isFlashing = false;
+    playerTruck.flashTimer = 0;
+    scoreElement.innerText = currentScore;
+}
+
+function startGame() {
+    resetGame();
+    gameHasStarted = true;
+    document.body.classList.add('game-started');
+    if (animationFrameId !== null) {
+        cancelAnimationFrame(animationFrameId);
+    }
+    gameLoop();
+}
+
 difficultyButtons.forEach((button) => {
     button.addEventListener('click', () => {
         setDifficulty(button.dataset.difficulty);
@@ -126,8 +152,10 @@ difficultyButtons.forEach((button) => {
 
 setDifficulty(currentDifficulty);
 
+startGameButton.addEventListener('click', startGame);
+
 window.addEventListener('keydown', (e) => {
-    if (isGameOver) return;
+    if (!gameHasStarted || isGameOver) return;
     if (e.key === 'ArrowUp') playerTruck.move('up');
     if (e.key === 'ArrowDown') playerTruck.move('down');
 });
@@ -171,6 +199,10 @@ function checkCollisions() {
 }
 
 function gameLoop() {
+    if (!gameHasStarted) {
+        return;
+    }
+
     if (isGameOver) {
         // Draw Game Over Screen
         ctx.fillStyle = 'rgba(0, 0, 0, 0.7)';
@@ -212,8 +244,5 @@ function gameLoop() {
 
     scoreElement.innerText = currentScore;
 
-    requestAnimationFrame(gameLoop);
+    animationFrameId = requestAnimationFrame(gameLoop);
 }
-
-// Start the engine
-gameLoop();

@@ -8,16 +8,27 @@
 </head>
 <body>
     <div id="game-container">
+        <div id="start-screen" aria-labelledby="start-screen-title">
+            <div id="start-card">
+                <p id="start-kicker">charity: water game</p>
+                <h1 id="start-screen-title">Water Drive</h1>
+                <p id="start-description">Use the arrow keys to guide the truck through the lanes and avoid the pollutants.</p>
+
+                <div id="difficulty-panel">
+                    <span class="panel-label">Choose a difficulty</span>
+                    <div id="difficulty-controls" role="group" aria-label="Choose game difficulty">
+                        <button type="button" class="difficulty-button" data-difficulty="easy">Easy</button>
+                        <button type="button" class="difficulty-button active" data-difficulty="normal">Normal</button>
+                        <button type="button" class="difficulty-button" data-difficulty="hard">Hard</button>
+                    </div>
+                </div>
+
+                <button id="start-game-button" type="button">Start Game</button>
+            </div>
+        </div>
+
         <div id="ui-layer">
             <div id="score-display">Score: <span id="score">1000</span></div>
-            <div id="difficulty-display">
-                <span>Difficulty:</span>
-                <div id="difficulty-controls" role="group" aria-label="Choose game difficulty">
-                    <button type="button" class="difficulty-button" data-difficulty="easy">Easy</button>
-                    <button type="button" class="difficulty-button active" data-difficulty="normal">Normal</button>
-                    <button type="button" class="difficulty-button" data-difficulty="hard">Hard</button>
-                </div>
-            </div>
         </div>
         <canvas id="gameCanvas" width="800" height="400"></canvas>
         <img id="charity-water-logo" src="img/cw_logo_horizontal.png" alt="charity: water logo">
