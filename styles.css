@@ -27,7 +27,7 @@ body {
     min-height: 100vh;
     padding: 16px;
     background: linear-gradient(180deg, #1f1f1f 0%, #2b2b2b 100%);
-    font-family: Arial, sans-serif;
+    font-family: "Proxima Nova", "Avenir", "Helvetica Neue", Helvetica, Arial, sans-serif;
 }
 
 #game-container {
