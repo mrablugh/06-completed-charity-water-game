@@ -66,6 +66,22 @@ body:not(.game-started) #game-container {
     text-align: center;
 }
 
+#page-footer a {
+    color: #8BD1CB;
+    font-weight: bold;
+    text-decoration: underline;
+    text-decoration-thickness: 2px;
+    text-underline-offset: 3px;
+}
+
+#page-footer a:hover {
+    color: #F5C243;
+}
+
+#page-footer a:visited {
+    color: #B7D6F5;
+}
+
 body:not(.game-started) #page-footer {
     display: none;
 }
