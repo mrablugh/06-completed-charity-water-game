@@ -21,6 +21,7 @@ Secondary Colors:
 
 body {
     display: flex;
+    flex-direction: column;
     justify-content: center;
     align-items: center;
     min-height: 100vh;
@@ -37,6 +38,19 @@ body {
     background-color: #555; /* Asphalt color for the road */
     overflow: hidden;
     box-shadow: 0 12px 30px rgba(0, 0, 0, 0.35);
+}
+
+#page-footer {
+    width: min(95vw, 800px);
+    margin-top: 14px;
+    padding: 14px 18px;
+    border: 2px solid rgba(245, 194, 67, 0.5);
+    border-radius: 16px;
+    background: rgba(20, 20, 20, 0.7);
+    color: rgba(255, 255, 255, 0.9);
+    font-size: 0.95rem;
+    line-height: 1.5;
+    text-align: center;
 }
 
 #gameCanvas {
@@ -219,6 +233,13 @@ body {
         width: 100%;
         margin-top: 8px;
         border-width: 3px;
+    }
+
+    #page-footer {
+        width: 100%;
+        margin-top: 12px;
+        padding: 12px 14px;
+        font-size: 0.9rem;
     }
 
     #ui-layer {
