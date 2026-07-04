@@ -30,6 +30,11 @@ body {
     font-family: "Proxima Nova", "Avenir", "Helvetica Neue", Helvetica, Arial, sans-serif;
 }
 
+body:not(.game-started) {
+    padding: 0;
+    overflow: hidden;
+}
+
 #game-container {
     position: relative;
     width: min(95vw, 800px);
@@ -38,6 +43,14 @@ body {
     background-color: #555; /* Asphalt color for the road */
     overflow: hidden;
     box-shadow: 0 12px 30px rgba(0, 0, 0, 0.35);
+}
+
+body:not(.game-started) #game-container {
+    width: 100vw;
+    height: 100vh;
+    aspect-ratio: auto;
+    border-width: 0;
+    box-shadow: none;
 }
 
 #page-footer {
@@ -53,10 +66,19 @@ body {
     text-align: center;
 }
 
+body:not(.game-started) #page-footer {
+    display: none;
+}
+
 #gameCanvas {
     display: block;
     width: 100%;
     height: 100%;
+}
+
+body:not(.game-started) #gameCanvas {
+    width: 100vw;
+    height: 100vh;
 }
 
 #start-screen {
@@ -72,6 +94,10 @@ body {
         linear-gradient(180deg, rgba(24, 24, 24, 0.94), rgba(12, 12, 12, 0.98));
 }
 
+body:not(.game-started) #start-screen {
+    padding: clamp(16px, 4vw, 48px);
+}
+
 #start-card {
     width: min(100%, 460px);
     max-height: calc(100% - 32px);
@@ -85,19 +111,15 @@ body {
     text-align: center;
 }
 
-#start-kicker {
-    margin-bottom: 10px;
-    color: #8BD1CB;
-    font-size: 0.8rem;
-    font-weight: bold;
-    letter-spacing: 0.18em;
-    text-transform: uppercase;
-}
-
 #start-screen-title {
     margin-bottom: 12px;
     font-size: clamp(2rem, 6vw, 3.4rem);
     line-height: 0.95;
+}
+
+body:not(.game-started) #start-card {
+    width: min(100%, 560px);
+    max-height: min(100vh - 32px, 720px);
 }
 
 #start-description {
@@ -231,10 +253,22 @@ body {
         align-items: flex-start;
     }
 
+    body:not(.game-started) {
+        padding: 0;
+        align-items: stretch;
+    }
+
     #game-container {
         width: 100%;
         margin-top: 8px;
         border-width: 3px;
+    }
+
+    body:not(.game-started) #game-container {
+        width: 100vw;
+        height: 100vh;
+        margin-top: 0;
+        border-width: 0;
     }
 
     #page-footer {
@@ -253,6 +287,11 @@ body {
     #start-card {
         width: min(100%, 420px);
         padding: 22px 18px;
+    }
+
+    body:not(.game-started) #start-card {
+        width: min(100%, 420px);
+        max-height: calc(100vh - 24px);
     }
 
     #start-screen-title {
