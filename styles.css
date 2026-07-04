@@ -86,6 +86,16 @@ body:not(.game-started) #page-footer {
     display: none;
 }
 
+.obstacle-guide-footer {
+    margin-top: 12px;
+    padding-top: 12px;
+    border-top: 1px solid rgba(255, 255, 255, 0.12);
+}
+
+.obstacle-list-footer {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+}
+
 #gameCanvas {
     display: block;
     width: 100%;
@@ -144,6 +154,45 @@ body:not(.game-started) #start-card {
     color: rgba(255, 255, 255, 0.9);
     font-size: 1rem;
     line-height: 1.5;
+}
+
+.obstacle-guide {
+    display: grid;
+    gap: 10px;
+    margin-bottom: 22px;
+    text-align: left;
+}
+
+.obstacle-list {
+    list-style: none;
+    display: grid;
+    gap: 8px;
+    color: rgba(255, 255, 255, 0.92);
+    font-size: 0.95rem;
+    line-height: 1.45;
+}
+
+.obstacle-list strong {
+    color: #8BD1CB;
+}
+
+.obstacle-item {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.obstacle-icon {
+    flex: 0 0 auto;
+    width: 28px;
+    height: 28px;
+    object-fit: contain;
+}
+
+.pothole-icon {
+    border-radius: 50%;
+    background: radial-gradient(circle at 50% 50%, #2b2b2b 0 52%, #5a5a5a 53% 100%);
+    border: 2px solid #1b1b1b;
 }
 
 #difficulty-panel {
@@ -317,6 +366,19 @@ body:not(.game-started) #start-card {
     #start-description {
         font-size: 0.95rem;
         max-width: none;
+    }
+
+    .obstacle-guide {
+        margin-bottom: 18px;
+    }
+
+    .obstacle-icon {
+        width: 24px;
+        height: 24px;
+    }
+
+    .obstacle-list-footer {
+        grid-template-columns: 1fr;
     }
 
     #difficulty-controls {
