@@ -117,6 +117,23 @@ body {
     gap: 10px;
 }
 
+#pause-button {
+    border: 2px solid #F5C243;
+    background: rgba(0, 0, 0, 0.35);
+    color: white;
+    padding: 6px 14px;
+    border-radius: 999px;
+    font: inherit;
+    font-size: clamp(12px, 1.8vw, 14px);
+    font-weight: bold;
+    cursor: pointer;
+}
+
+#pause-button.active {
+    background: #F5C243;
+    color: #222;
+}
+
 #charity-water-logo {
     position: absolute;
     right: 16px;

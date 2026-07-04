@@ -6,6 +6,7 @@ const ctx = canvas.getContext('2d');
 const scoreElement = document.getElementById('score');
 const startScreen = document.getElementById('start-screen');
 const startGameButton = document.getElementById('start-game-button');
+const pauseButton = document.getElementById('pause-button');
 const difficultyButtons = document.querySelectorAll('[data-difficulty]');
 
 // --- Game Configuration ---
@@ -37,6 +38,7 @@ let obstacles = [];
 let frameCount = 0; // Used to time obstacle spawns
 let currentDifficulty = 'normal';
 let gameHasStarted = false;
+let isPaused = false;
 let animationFrameId = null;
 
 // --- Classes ---
@@ -122,9 +124,15 @@ function setDifficulty(difficulty) {
     updateDifficultyButtons();
 }
 
+function updatePauseButton() {
+    pauseButton.textContent = isPaused ? 'Resume' : 'Pause';
+    pauseButton.classList.toggle('active', isPaused);
+}
+
 function resetGame() {
     currentScore = 1000;
     isGameOver = false;
+    isPaused = false;
     obstacles = [];
     frameCount = 0;
     playerTruck.lane = 1;
@@ -132,6 +140,7 @@ function resetGame() {
     playerTruck.isFlashing = false;
     playerTruck.flashTimer = 0;
     scoreElement.innerText = currentScore;
+    updatePauseButton();
 }
 
 function startGame() {
@@ -144,6 +153,20 @@ function startGame() {
     gameLoop();
 }
 
+function togglePause() {
+    if (!gameHasStarted || isGameOver) {
+        return;
+    }
+
+    isPaused = !isPaused;
+    updatePauseButton();
+
+    if (!isPaused && animationFrameId !== null) {
+        cancelAnimationFrame(animationFrameId);
+        gameLoop();
+    }
+}
+
 difficultyButtons.forEach((button) => {
     button.addEventListener('click', () => {
         setDifficulty(button.dataset.difficulty);
@@ -151,11 +174,18 @@ difficultyButtons.forEach((button) => {
 });
 
 setDifficulty(currentDifficulty);
+updatePauseButton();
 
 startGameButton.addEventListener('click', startGame);
+pauseButton.addEventListener('click', togglePause);
 
 window.addEventListener('keydown', (e) => {
     if (!gameHasStarted || isGameOver) return;
+    if (e.key === 'p' || e.key === 'P' || e.key === 'Escape') {
+        togglePause();
+        return;
+    }
+    if (isPaused) return;
     if (e.key === 'ArrowUp') playerTruck.move('up');
     if (e.key === 'ArrowDown') playerTruck.move('down');
 });
@@ -213,6 +243,17 @@ function gameLoop() {
         ctx.fillText('GAME OVER', GAME_WIDTH / 2, GAME_HEIGHT / 2);
         scoreElement.innerText = currentScore;
         return; // Stop the loop
+    }
+
+    if (isPaused) {
+        ctx.fillStyle = 'rgba(0, 0, 0, 0.45)';
+        ctx.fillRect(0, 0, GAME_WIDTH, GAME_HEIGHT);
+        ctx.fillStyle = 'white';
+        ctx.font = '40px Arial';
+        ctx.textAlign = 'center';
+        ctx.fillText('PAUSED', GAME_WIDTH / 2, GAME_HEIGHT / 2);
+        animationFrameId = requestAnimationFrame(gameLoop);
+        return;
     }
 
     ctx.clearRect(0, 0, GAME_WIDTH, GAME_HEIGHT);
